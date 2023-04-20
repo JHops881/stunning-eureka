@@ -16,5 +16,6 @@
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
     <Image Include="res\textures\wall.jpg" />
+    <Image Include="res\textures\awesomeface.png" />
   </ItemGroup>
 </Project>

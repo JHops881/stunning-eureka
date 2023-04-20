@@ -111,29 +111,63 @@ int main() {
   glEnableVertexAttribArray(2);
 
 
-  
+  // pick texture unit
+  glActiveTexture(GL_TEXTURE0);
   // make texture
-  unsigned int texture;
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
+  unsigned int texture_0;
+  glGenTextures(1, &texture_0);
+  glBindTexture(GL_TEXTURE_2D, texture_0);
   // configure wrapping and filtering
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   // load and generate texture
-  int width, height, nr_channels;
-  unsigned char* data = stbi_load(".\\res\\textures\\container.jpg", &width, &height, &nr_channels, 0);
-  if (data) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    std::cout << "Failed to load texture." << std::endl;
+  {
+    int width, height, nr_channels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(".\\res\\textures\\container.jpg", &width, &height, &nr_channels, 0);
+    if (data) {
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+      glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else {
+      std::cout << "Failed to load texture 0." << std::endl;
+    }
+    stbi_image_free(data);
   }
-  stbi_image_free(data);
+
+  // pick texture unit
+  glActiveTexture(GL_TEXTURE1);
+  // make texture
+  unsigned int texture_1;
+  glGenTextures(1, &texture_1);
+  glBindTexture(GL_TEXTURE_2D, texture_1);
+  // configure wrapping and filtering
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  // load and generate texture
+  {
+    int width, height, nr_channels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(".\\res\\textures\\awesomeface.png", &width, &height, &nr_channels, 0);
+    if (data) {
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+      glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else {
+      std::cout << "Failed to load texture 1." << std::endl;
+    }
+    stbi_image_free(data);
+  }
 
 
-  
+  my_shader.use();// select shader program
+  my_shader.SetInt("texture_0", 0);
+  my_shader.SetInt("texture_1", 1);
+
   
   // game loop
   while (!glfwWindowShouldClose(window)) {
@@ -145,11 +179,11 @@ int main() {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // select color
     glClear(GL_COLOR_BUFFER_BIT); // color window with selected color
 
-   
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_1);
 
-    my_shader.use();// select shader program
-    // not implemented: uniform stuff
     glBindVertexArray(vao); // select VAO
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // draw call
 
