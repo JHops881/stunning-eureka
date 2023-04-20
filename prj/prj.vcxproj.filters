@@ -3,9 +3,18 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="res\glad.c" />
+    <ClCompile Include="src\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\fragment_shader.frag" />
-    <None Include="res\shaders\vertex_shader.vert" />
+    <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <_EmbedManagedResourceFile Include="res\shaders\fragment_shader.frag" />
+    <_EmbedManagedResourceFile Include="res\shaders\vertex_shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\container.jpg" />
+    <Image Include="res\textures\wall.jpg" />
   </ItemGroup>
 </Project>
